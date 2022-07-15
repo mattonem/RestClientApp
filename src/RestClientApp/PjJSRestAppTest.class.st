@@ -5,3 +5,8 @@ Class {
 	#classTraits : 'PjTAppRunsInJS classTrait',
 	#category : #'RestClientApp-Tests'
 }
+
+{ #category : #accessing }
+PjJSRestAppTest >> waitIfAsync: duration [
+	duration wait
+]
