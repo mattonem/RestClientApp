@@ -4,9 +4,9 @@ Class {
 	#traits : 'PjTWaitUntilReady',
 	#classTraits : 'PjTWaitUntilReady classTrait',
 	#instVars : [
-		'nameInput',
-		'sayHelloButton',
-		'greetingMessageContainer'
+		'urlInput',
+		'submitButton',
+		'resultPre'
 	],
 	#category : #'RestClientApp-Tests'
 }
@@ -20,15 +20,15 @@ PjRestAppTest class >> appClass [
 PjRestAppTest >> setUp [
 
 	super setUp.
-	nameInput := document getElementById: #nameTextInput.
-	sayHelloButton := document getElementById: #sayHelloButton.
-	greetingMessageContainer := document getElementById: #greetingMessageContainer.
+	urlInput := document getElementById: #url.
+	submitButton := document getElementById: #send.
+	resultPre := document getElementById: #result.
 ]
 
 { #category : #waiting }
 PjRestAppTest >> test1 [
-	self changeElement: nameInput value: 'https://api.agify.io?name=bella'. 
-	self clickElement: sayHelloButton.
+	self changeElement: urlInput value: 'https://api.agify.io?name=bella'. 
+	self clickElement: submitButton.
 	1 second wait. "using javascript the call is async"
-	self assert: (greetingMessageContainer innerHTML) equals: '{"name":"bella","age":35,"count":40138}'
+	self assert: (resultPre innerHTML) equals: '{"name":"bella","age":35,"count":40138}'
 ]

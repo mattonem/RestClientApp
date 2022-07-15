@@ -10,20 +10,20 @@ Class {
 { #category : #accessing }
 PjRestClient >> start [
 
-	| nameInput sayHelloButton greetingMessageContainer |
+	| urlInput submitButton resultPre |
 	super start.
 	client := RestClient new.
-	nameInput := document getElementById: #nameTextInput.
-	sayHelloButton := document getElementById: #sayHelloButton.
-	nameInput
+	urlInput := document getElementById: #url.
+	submitButton := document getElementById: #send.
+	urlInput
 		addEventListener: #change
-		block: [ client method: 'GET'; url: nameInput value ].
-	greetingMessageContainer := document getElementById:
-		                            #greetingMessageContainer.
+		block: [ client method: 'GET'; url: urlInput value ].
+	resultPre := document getElementById:
+		                            #result.
 	client onComplete: [ :reponse | 
 			console log: reponse.
-			greetingMessageContainer innerHTML: reponse ].
-	sayHelloButton addEventListener: #click block: [ 
+			resultPre innerHTML: reponse ].
+	submitButton addEventListener: #click block: [ 
 		client send.
 		 ]
 ]
