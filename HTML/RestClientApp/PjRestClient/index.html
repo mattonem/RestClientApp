@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
@@ -13,12 +14,26 @@
       </div>
       <div class="card-body">
         <div class="mb-3 row">
+          <label for="method" class="col-auto col-form-label">Method:</label>
+          <select class="col-auto" class="form-select" aria-label="Method" id="method">
+            <option value="GET" selected>GET</option>
+            <option value="POST">POST</option>
+          </select>
+        </div>
+        <div class="mb-3 row">
           <label for="url" class="col-auto col-form-label">URL:</label>
           <div class="col-auto">
-            <input type="text" id="url" class="form-control" />
+          <input type="text" id="url" class="col-auto form-control" />
           </div>
+        </div>
+        <div class="mb-3 row" id="dataDiv">
+        </div>
+        <div class="mb-3 row">
+          <button id="addData">Add query parameter</button>
+        </div>
+        <div class="mb-3 row">
           <div class="col-auto">
-            <button type="submit" id="send"  class="btn btn-primary mb-3">Send</button>
+            <button type="submit" id="send" class="btn btn-primary mb-3">Send</button>
           </div>
         </div>
         <pre id="result">
