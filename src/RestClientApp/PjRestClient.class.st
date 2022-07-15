@@ -13,7 +13,7 @@ PjRestClient class >> appHtmlUrlString [
 ]
 
 { #category : #accessing }
-PjRestClient >> addDataRow [
+PjRestClient >> addQueryParamRow [
 
 	| dataDiv row key value col |
 	dataDiv := document getElementById: #dataDiv.
@@ -32,32 +32,37 @@ PjRestClient >> addDataRow [
 	self cssClassesElement: value set: #( 'col-auto' 'form-control' value ).
 	key
 		addEventListener: #change
-		block: [ client dataKey: key value value: value value ].
+		block: [ client queryDataKey: key value value: value value ].
 	value
 		addEventListener: #change
-		block: [ client dataKey: key value value: value value ]
+		block: [ client queryDataKey: key value value: value value ]
 ]
 
 { #category : #accessing }
 PjRestClient >> start [
 
-	| urlInput submitButton resultPre methodSelect addDataButton |
+	| urlInput submitButton resultPre methodSelect addQueryParamButton  bodyInput |
 	super start.
 	client := RestClient new.
+	client contentType: 'application/json'.
 	urlInput := document getElementById: #url.
 	methodSelect := document getElementById: #method.
 	submitButton := document getElementById: #send.
-	addDataButton := document getElementById: #addData.
+	addQueryParamButton := document getElementById: #addQueryParam.
+	bodyInput := document getElementById: #bodyData.
 	client method: 'GET'.
-	addDataButton
+	addQueryParamButton
 		addEventListener: #click
-		block: [ self addDataRow ].
+		block: [ self addQueryParamRow ].
 	methodSelect
 		addEventListener: #change
 		block: [ client method: methodSelect value ].
 	urlInput
 		addEventListener: #change
 		block: [ client url: urlInput value ].
+	bodyInput
+		addEventListener: #change
+		block: [ client body: bodyInput value ].
 	resultPre := document getElementById: #result.
 	client onComplete: [ :reponse | 
 		console log: reponse.

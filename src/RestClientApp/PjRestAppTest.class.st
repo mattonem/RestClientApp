@@ -8,7 +8,9 @@ Class {
 		'submitButton',
 		'resultPre',
 		'methodSelect',
-		'addDataButton'
+		'addQueryParamButton',
+		'addFormDataButton',
+		'bodyInput'
 	],
 	#category : #'RestClientApp-Tests'
 }
@@ -24,7 +26,8 @@ PjRestAppTest >> setUp [
 	super setUp.
 	urlInput := document getElementById: #url.
 	methodSelect := document getElementById: #method.
-	addDataButton := document getElementById: #addData.
+	addQueryParamButton := document getElementById: #addQueryParam.
+	bodyInput := document getElementById: #bodyData.
 	submitButton := document getElementById: #send.
 	resultPre := document getElementById: #result.
 ]
@@ -45,7 +48,7 @@ PjRestAppTest >> testGetWithData [
 	self changeElement: urlInput value: 'https://reqres.in/api/users'.
 	self changeElement: methodSelect value: 'GET'.
 
-	self clickElement: addDataButton.
+	self clickElement: addQueryParamButton.
 	dataDiv := document getElementById: #dataDiv.
 	keyinput := (dataDiv getElementsByClassName: 'key') first.
 	valueInput := (dataDiv getElementsByClassName: 'value') first.
@@ -64,6 +67,18 @@ PjRestAppTest >> testPostJson [
 	self clickElement: submitButton.
 	1 second wait. "using javascript the call is async"
 	self assert: (resultPre innerHTML includesSubstring: '"createdAt"')
+]
+
+{ #category : #waiting }
+PjRestAppTest >> testPostJsonWithData [
+
+	self changeElement: urlInput value: 'https://reqres.in/api/register'.
+	self changeElement: methodSelect value: 'POST'.
+	self changeElement: bodyInput value: '{"email": "eve.holt@reqres.in", "password": "pistol"}'.
+
+	self clickElement: submitButton.
+	self waitIfAsync: 2 seconds.
+	self assert: (resultPre innerHTML includesSubstring: '{"id":4,"token":"QpwL5tke4Pnpja7X4"}')
 ]
 
 { #category : #waiting }
