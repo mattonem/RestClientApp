@@ -29,5 +29,5 @@ PjRestAppTest >> setUp [
 PjRestAppTest >> test1 [
 	self changeElement: nameInput value: 'https://api.agify.io?name=bella'. 
 	self clickElement: sayHelloButton.
-	1halt
+	self assert: (greetingMessageContainer innerHTML) equals: '{"name":"bella","age":35,"count":40138}'
 ]

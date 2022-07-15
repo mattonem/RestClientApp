@@ -22,7 +22,7 @@ PjRestClient >> start [
 		                            #greetingMessageContainer.
 	client onComplete: [ :reponse | 
 			console log: reponse.
-			greetingMessageContainer innerHtml: reponse ].
+			greetingMessageContainer innerHTML: reponse ].
 	sayHelloButton addEventListener: #click block: [ 
 		client send.
 		 ]
