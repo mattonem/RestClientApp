@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 PjRestClient class >> appHtmlUrlString [
-	^ 'http://localhost:3000/'
+	^ super appHtmlUrlString
 ]
 
 { #category : #accessing }
