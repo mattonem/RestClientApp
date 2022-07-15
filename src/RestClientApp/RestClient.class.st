@@ -19,6 +19,12 @@ RestClient >> _method: aMethod url: aUrl with: aClient [
 ]
 
 { #category : #'as yet unclassified' }
+RestClient >> _newClient [
+	<javascript: 'return new XMLHttpRequest();'>
+	^ ZnClient new
+]
+
+{ #category : #'as yet unclassified' }
 RestClient >> _onComplete: aBlock with: aClient [
 	<javascript: 'aClient.onreadystatechange = function() {
     aBlock(this.response)

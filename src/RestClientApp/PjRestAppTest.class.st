@@ -11,6 +11,11 @@ Class {
 	#category : #'RestClientApp-Tests'
 }
 
+{ #category : #'suite parameters' }
+PjRestAppTest class >> appClass [
+	^ PjRestClient
+]
+
 { #category : #waiting }
 PjRestAppTest >> setUp [
 
