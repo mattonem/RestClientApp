@@ -15,16 +15,21 @@ PjRestClient class >> appHtmlUrlString [
 { #category : #accessing }
 PjRestClient >> addDataRow [
 
-	| dataDiv row key value |
+	| dataDiv row key value col |
 	dataDiv := document getElementById: #dataDiv.
 	row := self addElement: 'div' to: dataDiv.
 	self cssClassesElement: row set: #( 'mb-3' row ).
-	key := self addElement: 'input' to: row.
+	col := self addElement: 'dev' to: row.
+	self cssClassesElement: col set: #( 'col' ).
+	key := self addElement: 'input' to: col.
 	self attribute: 'type' ofElement: key set: 'text'.
-	self cssClassesElement: key set: #( 'col-auto' key).
-	value := self addElement: 'input' to: row.
+	self cssClassesElement: key set: #( 'col-auto' 'form-control' key ).
+	col := self addElement: 'dev' to: row.
+	self cssClassesElement: col set: #( 'col' ).
+
+	value := self addElement: 'input' to: col.
 	self attribute: 'type' ofElement: value set: 'text'.
-	self cssClassesElement: value set: #( 'col-auto' value).
+	self cssClassesElement: value set: #( 'col-auto' 'form-control' value ).
 	key
 		addEventListener: #change
 		block: [ client dataKey: key value value: value value ].
