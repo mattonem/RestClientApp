@@ -10,62 +10,11 @@ Class {
 		'body',
 		'contentType'
 	],
+	#pools : [
+		'PjBrowserGlobals'
+	],
 	#category : #RestClientApp
 }
-
-{ #category : #'as yet unclassified' }
-RestClient >> _body: aBody contentType: aContentType with: aClient [
-
-	<javascript: 'aClient.setRequestHeader("Content-Type", aContentType);'>
-	^ aClient
-		  contents: aBody;
-		  contentType: aContentType
-]
-
-{ #category : #'as yet unclassified' }
-RestClient >> _bodyFormat: aString with: aZnClient [ 
-	self shouldBeImplemented.
-]
-
-{ #category : #'as yet unclassified' }
-RestClient >> _contentType: aString with: aClient [
-
-	<javascript: 'aClient.setRequestHeader("Content-Type", aString);'>
-	^ aClient
-		  contents: body;
-		  contentType: aString
-]
-
-{ #category : #'as yet unclassified' }
-RestClient >> _method: aMethod url: aUrl parameters: someParam with: aClient [
-	
-	<javascript: 'aClient.open(aMethod, aUrl + this.encodeParam(someParam))'>
-	aClient
-		method: aMethod;
-		url: aUrl
-]
-
-{ #category : #'as yet unclassified' }
-RestClient >> _newClient [
-	<javascript: 'return new XMLHttpRequest();'>
-	^ ZnClient new
-]
-
-{ #category : #'as yet unclassified' }
-RestClient >> _onComplete: aBlock with: aClient [
-	<javascript: 'aClient.onreadystatechange = function() {
-    aBlock(this.response)
-  };'>
-	onComplete := aBlock
-]
-
-{ #category : #actions }
-RestClient >> _sendWith: aClient withBody: aBody [
-
-	<javascript: 'console.log(aBody);aClient.send(aBody);'>
-
-	^ onComplete value: aClient execute contents.
-]
 
 { #category : #accessing }
 RestClient >> body: aString [ 
@@ -121,16 +70,12 @@ RestClient >> queryDataKey: aString value: aString2 [
 RestClient >> send [
 
 	| client |
-	client := self _newClient.
-	self
-		_method: method
-		url: url
-		parameters: queryData
-		with: client.
-	self _onComplete: onComplete with: client.
-	body ifNotNil: [ 
-		self _body: body contentType: contentType with: client ].
-	self _sendWith: client withBody: body
+	client := XMLHttpRequest new. 
+	client open: method url: (url, (self encodeParam: queryData ) ).
+	client setRequestHeader: 'content-type' value: contentType.
+	client send: body.
+"	self _onComplete: onComplete with: client."
+
 ]
 
 { #category : #accessing }
