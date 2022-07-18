@@ -71,9 +71,13 @@ RestClient >> send [
 
 	| client |
 	client := XMLHttpRequest new. 
-	client open: method url: (url, (self encodeParam: queryData ) ).
+	client open: method url: (url, (self encodeParam: queryData )) sync: false.
 	client setRequestHeader: 'content-type' value: contentType.
+
+	client instVarNamed:#onreadystatechange put: [].
+
 	client send: body.
+		onComplete value: client.
 "	self _onComplete: onComplete with: client."
 
 ]
