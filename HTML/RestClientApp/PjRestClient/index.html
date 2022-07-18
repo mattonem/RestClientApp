@@ -27,11 +27,11 @@
           </div>
         </div>
         <div class="mb-3 row" id="dataDiv">
-        <div class="mb-3 row">
-          <div class="col">
-            Query data
+          <div class="mb-3 row">
+            <div class="col">
+              Query data
+            </div>
           </div>
-        </div>
           <div class="mb-3 row">
             <div class="col">
               key
@@ -45,7 +45,14 @@
           <button id="addQueryParam">Add query parameter</button>
         </div>
         <div class="mb-3 row">
-          <textarea name="body" id="bodyData" rows="8" cols="80"></textarea>
+          <label for="bodyFormat" class="col-auto col-form-label">Body format:</label>
+          <select class="col-auto" class="form-select" aria-label="body type" id="bodyFormat">
+            <option value="none" selected>none</option>
+            <option value="application/json">json</option>
+          </select>
+        </div>
+        <div class="mb-3 row" id="bodyForm">
+
         </div>
 
         <div class="mb-3 row">
