@@ -41,7 +41,7 @@ PjRestClient >> addQueryParamRow [
 { #category : #accessing }
 PjRestClient >> start [
 
-	| urlInput submitButton resultPre methodSelect addQueryParamButton  bodyInput |
+	| urlInput submitButton methodSelect addQueryParamButton bodyInput |
 	super start.
 	client := RestClient new.
 	client contentType: 'application/json'.
@@ -63,9 +63,11 @@ PjRestClient >> start [
 	bodyInput
 		addEventListener: #change
 		block: [ client body: bodyInput value ].
-	resultPre := document getElementById: #result.
-	client onComplete: [ :reponse | 
-		console log: reponse.
-		resultPre innerHTML: reponse ].
+
+	client onComplete: [ :aClient | 
+		| resultPre |
+		console log: aClient.
+		resultPre := document getElementById: #result.
+		resultPre innerHTML: aClient responseText ].
 	submitButton addEventListener: #click block: [ client send ]
 ]

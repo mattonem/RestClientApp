@@ -58,7 +58,7 @@ RestClient >> method: anObject [
 { #category : #accessing }
 RestClient >> onComplete: anObject [
 
-	onComplete := anObject
+	onComplete := anObject 
 ]
 
 { #category : #'as yet unclassified' }
