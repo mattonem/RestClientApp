@@ -41,7 +41,7 @@ PjRestClient >> addQueryParamRow [
 { #category : #accessing }
 PjRestClient >> start [
 
-	| urlInput submitButton methodSelect addQueryParamButton bodyInput |
+	| urlInput submitButton methodSelect addQueryParamButton bodyFormatSelect |
 	super start.
 	client := RestClient new.
 	client contentType: 'application/json'.
@@ -49,20 +49,21 @@ PjRestClient >> start [
 	methodSelect := document getElementById: #method.
 	submitButton := document getElementById: #send.
 	addQueryParamButton := document getElementById: #addQueryParam.
-	bodyInput := document getElementById: #bodyData.
+	bodyFormatSelect := document getElementById: #bodyFormat.
 	client method: 'GET'.
 	addQueryParamButton
 		addEventListener: #click
 		block: [ self addQueryParamRow ].
+	bodyFormatSelect addEventListener: #change block: [ 
+		client contentType: bodyFormatSelect value.
+		client body: nil.
+		self updateBodyForm: bodyFormatSelect value ].
 	methodSelect
 		addEventListener: #change
 		block: [ client method: methodSelect value ].
 	urlInput
 		addEventListener: #change
 		block: [ client url: urlInput value ].
-	bodyInput
-		addEventListener: #change
-		block: [ client body: bodyInput value ].
 
 	client onComplete: [ :aClient | 
 		| resultPre |
@@ -70,4 +71,18 @@ PjRestClient >> start [
 		resultPre := document getElementById: #result.
 		resultPre innerHTML: aClient responseText ].
 	submitButton addEventListener: #click block: [ client send ]
+]
+
+{ #category : #accessing }
+PjRestClient >> updateBodyForm: format [
+
+	| bodySection |
+	bodySection := document getElementById: #bodyForm.
+	bodySection innerHTML: ''.
+	format = 'application/json' ifTrue: [ 
+		| textArea |
+		textArea := self addElement: 'textArea' to: bodySection.
+		textArea
+			addEventListener: #change
+			block: [ client body: textArea value ] ]
 ]

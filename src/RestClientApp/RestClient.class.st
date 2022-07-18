@@ -28,8 +28,6 @@ RestClient >> contentType: aString [
 
 { #category : #'as yet unclassified' }
 RestClient >> encodeParam: aDict [
-
-	<jsAlias: #encodeParam>
 	| string |
 	string := '?'.
 	aDict keysAndValuesDo: [ :key :value | 
@@ -73,12 +71,8 @@ RestClient >> send [
 	client := XMLHttpRequest new. 
 	client open: method url: (url, (self encodeParam: queryData )) sync: false.
 	client setRequestHeader: 'content-type' value: contentType.
-
-	client instVarNamed:#onreadystatechange put: [].
-
 	client send: body.
-		onComplete value: client.
-"	self _onComplete: onComplete with: client."
+	onComplete value: client.
 
 ]
 
