@@ -41,7 +41,7 @@ PjRestClient >> addQueryParamRow [
 { #category : #accessing }
 PjRestClient >> start [
 
-	| urlInput submitButton methodSelect addQueryParamButton bodyFormatSelect |
+	| urlInput submitButton methodSelect addQueryParamButton bodyFormatSelect timeoutInput |
 	super start.
 	client := RestClient new.
 	client contentType: 'application/json'.
@@ -50,7 +50,11 @@ PjRestClient >> start [
 	submitButton := document getElementById: #send.
 	addQueryParamButton := document getElementById: #addQueryParam.
 	bodyFormatSelect := document getElementById: #bodyFormat.
+	timeoutInput := document getElementById: #timeout.
 	client method: 'GET'.
+	timeoutInput
+		addEventListener: #change
+		block: [ client timeout: timeoutInput value ].
 	addQueryParamButton
 		addEventListener: #click
 		block: [ self addQueryParamRow ].
@@ -70,6 +74,11 @@ PjRestClient >> start [
 		console log: aClient.
 		resultPre := document getElementById: #result.
 		resultPre innerHTML: aClient currentTarget responseText ].
+	client onTimeout: [ :aClient | 
+		| resultPre |
+		console log: aClient.
+		resultPre := document getElementById: #result.
+		resultPre innerHTML: 'Request timedout'].
 	submitButton addEventListener: #click block: [ client send ]
 ]
 

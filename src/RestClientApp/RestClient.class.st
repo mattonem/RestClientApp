@@ -8,7 +8,9 @@ Class {
 		'queryData',
 		'formBodyData',
 		'body',
-		'contentType'
+		'contentType',
+		'timeout',
+		'onTimeout'
 	],
 	#pools : [
 		'PjBrowserGlobals'
@@ -59,6 +61,11 @@ RestClient >> onComplete: anObject [
 	onComplete := anObject 
 ]
 
+{ #category : #accessing }
+RestClient >> onTimeout: aFullBlockClosure [ 
+	onTimeout := aFullBlockClosure
+]
+
 { #category : #'as yet unclassified' }
 RestClient >> queryDataKey: aString value: aString2 [ 
 	queryData at: aString put: aString2 
@@ -74,12 +81,20 @@ RestClient >> send [
 		url: url , (self encodeParam: queryData)
 		async: true.
 	client setRequestHeader: 'content-type' value: contentType.
-
+	client instVarNamed:#timeout put: timeout.
 	client 
 		addEventListener: #load
 		block: onComplete.
+	client 
+		addEventListener: #timeout
+		block: onTimeout.
 	client send: body.
 	
+]
+
+{ #category : #accessing }
+RestClient >> timeout: aString [ 
+	timeout := aString asNumber
 ]
 
 { #category : #accessing }

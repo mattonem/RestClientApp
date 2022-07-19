@@ -10,7 +10,8 @@ Class {
 		'methodSelect',
 		'addQueryParamButton',
 		'addFormDataButton',
-		'bodyFormatSelect'
+		'bodyFormatSelect',
+		'timeoutInput'
 	],
 	#category : #'RestClientApp-Tests'
 }
@@ -23,13 +24,15 @@ PjRestAppTest class >> appClass [
 { #category : #waiting }
 PjRestAppTest >> setUp [
 
+	|  | 
 	super setUp.
 	urlInput := document getElementById: #url.
 	methodSelect := document getElementById: #method.
 	addQueryParamButton := document getElementById: #addQueryParam.
 	bodyFormatSelect := document getElementById: #bodyFormat.
 	submitButton := document getElementById: #send.
-	resultPre := document getElementById: #result
+	resultPre := document getElementById: #result.
+	timeoutInput := document getElementById: #timeout.
 ]
 
 { #category : #waiting }
@@ -59,6 +62,29 @@ PjRestAppTest >> testGetWithData [
 	2 second wait.
 	resultPre innerHTML.
 	self assert: (resultPre innerHTML includesSubstring: '"per_page"')
+	
+]
+
+{ #category : #waiting }
+PjRestAppTest >> testGetWithDataTimeout [
+
+	| dataDiv keyinput valueInput |
+	self changeElement: urlInput value: 'https://reqres.in/api/users'.
+	self changeElement: methodSelect value: 'GET'.
+
+	self clickElement: addQueryParamButton.
+	dataDiv := document getElementById: #dataDiv.
+	keyinput := (dataDiv getElementsByClassName: 'key') first.
+	valueInput := (dataDiv getElementsByClassName: 'value') first.
+	
+	self changeElement: timeoutInput value: 500.
+	self changeElement: keyinput value: 'delay'.
+	self changeElement: valueInput value: 2.
+	self clickElement: submitButton.
+	1 second wait.
+	resultPre innerHTML.
+	self assert: (resultPre innerHTML includesSubstring: 'Request timedout')
+	
 ]
 
 { #category : #waiting }
