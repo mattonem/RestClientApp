@@ -78,7 +78,7 @@ PjRestClient >> start [
 		| resultPre |
 		console log: aClient.
 		resultPre := document getElementById: #result.
-		resultPre innerHTML: 'Request timedout'].
+		resultPre innerHTML: 'Request timed out'].
 	submitButton addEventListener: #click block: [ client send ]
 ]
 

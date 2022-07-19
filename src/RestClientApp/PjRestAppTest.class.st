@@ -83,7 +83,7 @@ PjRestAppTest >> testGetWithDataTimeout [
 	self clickElement: submitButton.
 	1 second wait.
 	resultPre innerHTML.
-	self assert: (resultPre innerHTML includesSubstring: 'Request timedout')
+	self assert: resultPre innerHTML equals: 'Request timed out'
 	
 ]
 
