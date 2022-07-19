@@ -68,12 +68,18 @@ RestClient >> queryDataKey: aString value: aString2 [
 RestClient >> send [
 
 	| client |
-	client := XMLHttpRequest new. 
-	client open: method url: (url, (self encodeParam: queryData )) sync: false.
+	client := XMLHttpRequest new.
+	client
+		open: method
+		url: url , (self encodeParam: queryData)
+		async: true.
 	client setRequestHeader: 'content-type' value: contentType.
-	client send: body.
-	onComplete value: client.
 
+	client 
+		addEventListener: #load
+		block: onComplete.
+	client send: body.
+	
 ]
 
 { #category : #accessing }

@@ -69,7 +69,7 @@ PjRestClient >> start [
 		| resultPre |
 		console log: aClient.
 		resultPre := document getElementById: #result.
-		resultPre innerHTML: aClient responseText ].
+		resultPre innerHTML: aClient currentTarget responseText ].
 	submitButton addEventListener: #click block: [ client send ]
 ]
 
