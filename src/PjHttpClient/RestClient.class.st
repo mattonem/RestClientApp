@@ -2,7 +2,6 @@ Class {
 	#name : #RestClient,
 	#superclass : #Object,
 	#instVars : [
-		'onComplete',
 		'url',
 		'method',
 		'queryData',
@@ -10,12 +9,13 @@ Class {
 		'body',
 		'contentType',
 		'timeout',
-		'onTimeout'
+		'onTimeout',
+		'onLoad'
 	],
 	#pools : [
 		'PjBrowserGlobals'
 	],
-	#category : #RestClientApp
+	#category : #'PjHttpClient-Core'
 }
 
 { #category : #accessing }
@@ -31,6 +31,7 @@ RestClient >> contentType: aString [
 { #category : #'as yet unclassified' }
 RestClient >> encodeParam: aDict [
 	| string |
+	aDict ifEmpty: [ ^ '' ].
 	string := '?'.
 	aDict keysAndValuesDo: [ :key :value | 
 		string := string , key , '=' , value , '&' ].
@@ -46,7 +47,8 @@ RestClient >> formDataKey: aString value: aString2 [
 RestClient >> initialize [
 	super initialize.
 	queryData := Dictionary new.
-	formBodyData := Dictionary new
+	formBodyData := Dictionary new.
+	method := 'GET'
 ]
 
 { #category : #accessing }
@@ -56,9 +58,9 @@ RestClient >> method: anObject [
 ]
 
 { #category : #accessing }
-RestClient >> onComplete: anObject [
+RestClient >> onLoad: anObject [
 
-	onComplete := anObject 
+	onLoad := anObject 
 ]
 
 { #category : #accessing }
@@ -66,7 +68,7 @@ RestClient >> onTimeout: aFullBlockClosure [
 	onTimeout := aFullBlockClosure
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 RestClient >> queryDataKey: aString value: aString2 [ 
 	queryData at: aString put: aString2 
 ]
@@ -84,7 +86,7 @@ RestClient >> send [
 	client instVarNamed:#timeout put: timeout.
 	client 
 		addEventListener: #load
-		block: onComplete.
+		block: onLoad.
 	client 
 		addEventListener: #timeout
 		block: onTimeout.

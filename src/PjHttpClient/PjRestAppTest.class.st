@@ -13,7 +13,7 @@ Class {
 		'bodyFormatSelect',
 		'timeoutInput'
 	],
-	#category : #'RestClientApp-Tests'
+	#category : #'PjHttpClient-Tests'
 }
 
 { #category : #'suite parameters' }

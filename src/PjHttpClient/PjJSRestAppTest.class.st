@@ -3,5 +3,5 @@ Class {
 	#superclass : #PjRestAppTest,
 	#traits : 'PjTAppRunsInJS',
 	#classTraits : 'PjTAppRunsInJS classTrait',
-	#category : #'RestClientApp-Tests'
+	#category : #'PjHttpClient-Tests'
 }

@@ -4,12 +4,12 @@ Class {
 	#instVars : [
 		'client'
 	],
-	#category : #RestClientApp
+	#category : #'PjHttpClient-App'
 }
 
 { #category : #'as yet unclassified' }
 PjRestClient class >> appHtmlUrlString [
-	^ super appHtmlUrlString
+	^ 'http://localhost:3000/'
 ]
 
 { #category : #accessing }
@@ -38,7 +38,7 @@ PjRestClient >> addQueryParamRow [
 		block: [ client queryDataKey: key value value: value value ]
 ]
 
-{ #category : #accessing }
+{ #category : #'start-stop' }
 PjRestClient >> start [
 
 	| urlInput submitButton methodSelect addQueryParamButton bodyFormatSelect timeoutInput |
@@ -69,7 +69,7 @@ PjRestClient >> start [
 		addEventListener: #change
 		block: [ client url: urlInput value ].
 
-	client onComplete: [ :aClient | 
+	client onLoad: [ :aClient | 
 		| resultPre |
 		console log: aClient.
 		resultPre := document getElementById: #result.
