@@ -38,37 +38,100 @@ PjHttpClientApp >> addQueryParamRow [
 		block: [ client queryDataKey: key value value: value value ]
 ]
 
-{ #category : #'start-stop' }
-PjHttpClientApp >> start [
+{ #category : #'dom update' }
+PjHttpClientApp >> changeElement: domElement value: newValue [
+	domElement value: newValue.
+	self dispatchEvent: #change to: domElement.
+]
 
-	| urlInput submitButton methodSelect addQueryParamButton bodyFormatSelect timeoutInput |
-	super start.
-	client := PjHttpClient new.
-	client contentType: 'application/json'.
-	urlInput := document getElementById: #url.
-	methodSelect := document getElementById: #method.
-	submitButton := document getElementById: #send.
+{ #category : #'dom update' }
+PjHttpClientApp >> dispatchEvent: eventName to: htmlElement [
+	htmlElement dispatchEvent: (self newEvent: eventName)
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> initAddQueryParamButton [
+
+	| addQueryParamButton |
 	addQueryParamButton := document getElementById: #addQueryParam.
-	bodyFormatSelect := document getElementById: #bodyFormat.
-	timeoutInput := document getElementById: #timeout.
-	client method: 'GET'.
-	timeoutInput
-		addEventListener: #change
-		block: [ client timeout: timeoutInput value ].
 	addQueryParamButton
 		addEventListener: #click
-		block: [ self addQueryParamRow ].
+		block: [ self addQueryParamRow ]
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> initBodyFormatSelect [
+
+	| bodyFormatSelect |
+	bodyFormatSelect := document getElementById: #bodyFormat.
 	bodyFormatSelect addEventListener: #change block: [ 
 		client contentType: bodyFormatSelect value.
 		client body: nil.
-		self updateBodyForm: bodyFormatSelect value ].
+		self updateBodyForm: bodyFormatSelect value ]
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> initMethodSelect [
+
+	| methodSelect |
+	methodSelect := document getElementById: #method.
 	methodSelect
 		addEventListener: #change
 		block: [ client method: methodSelect value ].
+	self changeElement: methodSelect value: 'GET'. 
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> initSubmitButton [
+
+	| submitButton |
+	submitButton := document getElementById: #send.
+	submitButton addEventListener: #click block: [ client send ].
+	self changeElement: submitButton value: 2000
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> initTimeout [
+
+	| timeoutInput |
+	timeoutInput := document getElementById: #timeout.
+
+	timeoutInput
+		addEventListener: #change
+		block: [ client timeout: timeoutInput value ]
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> initUrlInput [
+
+	| urlInput |
+	urlInput := document getElementById: #url.
 	urlInput
 		addEventListener: #change
-		block: [ client url: urlInput value ].
+		block: [ client url: urlInput value ]
+]
 
+{ #category : #'dom update' }
+PjHttpClientApp >> newEvent: eventName [
+	| event |
+	event := document createEvent: #HTMLEvents.
+   event initEvent: eventName with: true with: true.
+	^event
+]
+
+{ #category : #'start-stop' }
+PjHttpClientApp >> start [
+
+	super start.
+	client := PjHttpClient new.
+	client contentType: 'application/json'.
+	client method: 'GET'.
+	self initTimeout.
+	self initAddQueryParamButton.
+	self initBodyFormatSelect.
+	self initMethodSelect.
+	self initUrlInput.
+	self initSubmitButton.
 	client onLoad: [ :aClient | 
 		| resultPre |
 		console log: aClient.
@@ -78,8 +141,7 @@ PjHttpClientApp >> start [
 		| resultPre |
 		console log: aClient.
 		resultPre := document getElementById: #result.
-		resultPre innerHTML: 'Request timed out'].
-	submitButton addEventListener: #click block: [ client send ]
+		resultPre innerHTML: 'Request timed out' ]
 ]
 
 { #category : #accessing }

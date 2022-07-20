@@ -129,7 +129,7 @@ PjHttpClient >> queryDataKey: aString value: aString2 [
 { #category : #actions }
 PjHttpClient >> send [
 
-	| client block |
+	| client |
 	client := XMLHttpRequest new.
 	client
 		open: method
