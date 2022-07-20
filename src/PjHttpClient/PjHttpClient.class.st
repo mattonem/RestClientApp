@@ -10,7 +10,13 @@ Class {
 		'contentType',
 		'timeout',
 		'onTimeout',
-		'onLoad'
+		'onLoad',
+		'onAbort',
+		'onError',
+		'onLoadEnd',
+		'onLoadStart',
+		'onProgress',
+		'onReadyStateChange'
 	],
 	#pools : [
 		'PjBrowserGlobals'
@@ -43,6 +49,17 @@ PjHttpClient >> formDataKey: aString value: aString2 [
 	formBodyData at: aString put: aString2 
 ]
 
+{ #category : #actions }
+PjHttpClient >> initCallbacksOn: client [
+	onAbort ifNotNil: [ client addEventListener: #abort block: onAbort ].
+	onError ifNotNil: [ client addEventListener: #error block: onError ].
+	onLoad ifNotNil: [ client addEventListener: #load block: onLoad ].
+	onLoadEnd ifNotNil: [ client addEventListener: #loadend block: onLoadEnd ].
+	onLoadStart ifNotNil: [ client addEventListener: #loadstart block: onLoadStart ].
+	onProgress ifNotNil: [ client addEventListener: #progress block: onProgress ].
+	onTimeout ifNotNil: [ client addEventListener: #timeout block: onTimeout ].
+]
+
 { #category : #accessing }
 PjHttpClient >> initialize [
 	super initialize.
@@ -58,9 +75,45 @@ PjHttpClient >> method: anObject [
 ]
 
 { #category : #accessing }
+PjHttpClient >> onAbort: anObject [
+
+	onAbort := anObject
+]
+
+{ #category : #accessing }
+PjHttpClient >> onError: anObject [
+
+	onError := anObject
+]
+
+{ #category : #accessing }
 PjHttpClient >> onLoad: anObject [
 
 	onLoad := anObject 
+]
+
+{ #category : #accessing }
+PjHttpClient >> onLoadEnd: anObject [
+
+	onLoadEnd := anObject
+]
+
+{ #category : #accessing }
+PjHttpClient >> onLoadStart: anObject [
+
+	onLoadStart := anObject
+]
+
+{ #category : #accessing }
+PjHttpClient >> onProgress: anObject [
+
+	onProgress := anObject
+]
+
+{ #category : #accessing }
+PjHttpClient >> onReadyStateChange: anObject [
+
+	onReadyStateChange := anObject
 ]
 
 { #category : #accessing }
@@ -76,22 +129,16 @@ PjHttpClient >> queryDataKey: aString value: aString2 [
 { #category : #actions }
 PjHttpClient >> send [
 
-	| client |
+	| client block |
 	client := XMLHttpRequest new.
 	client
 		open: method
 		url: url , (self encodeParam: queryData)
 		async: true.
 	client setRequestHeader: 'content-type' value: contentType.
-	client instVarNamed:#timeout put: timeout.
-	client 
-		addEventListener: #load
-		block: onLoad.
-	client 
-		addEventListener: #timeout
-		block: onTimeout.
-	client send: body.
-	
+	client instVarNamed: #timeout put: timeout.
+	self initCallbacksOn: client.
+	client send: body
 ]
 
 { #category : #accessing }
