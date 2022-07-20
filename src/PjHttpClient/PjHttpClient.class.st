@@ -1,5 +1,5 @@
 Class {
-	#name : #RestClient,
+	#name : #PjHttpClient,
 	#superclass : #Object,
 	#instVars : [
 		'url',
@@ -19,17 +19,17 @@ Class {
 }
 
 { #category : #accessing }
-RestClient >> body: aString [ 
+PjHttpClient >> body: aString [ 
 	body := aString
 ]
 
 { #category : #accessing }
-RestClient >> contentType: aString [ 
+PjHttpClient >> contentType: aString [ 
 	contentType := aString
 ]
 
 { #category : #'as yet unclassified' }
-RestClient >> encodeParam: aDict [
+PjHttpClient >> encodeParam: aDict [
 	| string |
 	aDict ifEmpty: [ ^ '' ].
 	string := '?'.
@@ -39,12 +39,12 @@ RestClient >> encodeParam: aDict [
 ]
 
 { #category : #'as yet unclassified' }
-RestClient >> formDataKey: aString value: aString2 [ 
+PjHttpClient >> formDataKey: aString value: aString2 [ 
 	formBodyData at: aString put: aString2 
 ]
 
 { #category : #accessing }
-RestClient >> initialize [
+PjHttpClient >> initialize [
 	super initialize.
 	queryData := Dictionary new.
 	formBodyData := Dictionary new.
@@ -52,29 +52,29 @@ RestClient >> initialize [
 ]
 
 { #category : #accessing }
-RestClient >> method: anObject [
+PjHttpClient >> method: anObject [
 
 	method := anObject
 ]
 
 { #category : #accessing }
-RestClient >> onLoad: anObject [
+PjHttpClient >> onLoad: anObject [
 
 	onLoad := anObject 
 ]
 
 { #category : #accessing }
-RestClient >> onTimeout: aFullBlockClosure [ 
+PjHttpClient >> onTimeout: aFullBlockClosure [ 
 	onTimeout := aFullBlockClosure
 ]
 
 { #category : #accessing }
-RestClient >> queryDataKey: aString value: aString2 [ 
+PjHttpClient >> queryDataKey: aString value: aString2 [ 
 	queryData at: aString put: aString2 
 ]
 
 { #category : #actions }
-RestClient >> send [
+PjHttpClient >> send [
 
 	| client |
 	client := XMLHttpRequest new.
@@ -95,12 +95,12 @@ RestClient >> send [
 ]
 
 { #category : #accessing }
-RestClient >> timeout: aString [ 
+PjHttpClient >> timeout: aString [ 
 	timeout := aString asNumber
 ]
 
 { #category : #accessing }
-RestClient >> url: anObject [
+PjHttpClient >> url: anObject [
 
 	url := anObject
 ]

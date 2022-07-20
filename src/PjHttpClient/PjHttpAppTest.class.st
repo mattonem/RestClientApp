@@ -1,5 +1,5 @@
 Class {
-	#name : #PjRestAppTest,
+	#name : #PjHttpAppTest,
 	#superclass : #PjWebAppTestCase,
 	#traits : 'PjTWaitUntilReady',
 	#classTraits : 'PjTWaitUntilReady classTrait',
@@ -17,12 +17,12 @@ Class {
 }
 
 { #category : #'suite parameters' }
-PjRestAppTest class >> appClass [
-	^ PjRestClient
+PjHttpAppTest class >> appClass [
+	^ PjHttpClientApp
 ]
 
 { #category : #waiting }
-PjRestAppTest >> setUp [
+PjHttpAppTest >> setUp [
 
 	|  | 
 	super setUp.
@@ -36,7 +36,7 @@ PjRestAppTest >> setUp [
 ]
 
 { #category : #waiting }
-PjRestAppTest >> testGetUrl [
+PjHttpAppTest >> testGetUrl [
 	self changeElement: urlInput value: 'https://reqres.in/api/users/2'. 
 	self changeElement: methodSelect value: 'GET'. 
 	self clickElement: submitButton.
@@ -46,7 +46,7 @@ PjRestAppTest >> testGetUrl [
 ]
 
 { #category : #waiting }
-PjRestAppTest >> testGetWithData [
+PjHttpAppTest >> testGetWithData [
 
 	| dataDiv keyinput valueInput |
 	self changeElement: urlInput value: 'https://reqres.in/api/users'.
@@ -66,7 +66,7 @@ PjRestAppTest >> testGetWithData [
 ]
 
 { #category : #waiting }
-PjRestAppTest >> testGetWithDataTimeout [
+PjHttpAppTest >> testGetWithDataTimeout [
 
 	| dataDiv keyinput valueInput |
 	self changeElement: urlInput value: 'https://reqres.in/api/users'.
@@ -88,7 +88,7 @@ PjRestAppTest >> testGetWithDataTimeout [
 ]
 
 { #category : #waiting }
-PjRestAppTest >> testPostJson [
+PjHttpAppTest >> testPostJson [
 
 	self changeElement: urlInput value: 'https://reqres.in/api/users'.
 	self changeElement: methodSelect value: 'POST'.
@@ -99,7 +99,7 @@ PjRestAppTest >> testPostJson [
 ]
 
 { #category : #waiting }
-PjRestAppTest >> testPostJsonWithData [
+PjHttpAppTest >> testPostJsonWithData [
 
 	| bodySection bodyInput |
 	self changeElement: urlInput value: 'https://reqres.in/api/register'.

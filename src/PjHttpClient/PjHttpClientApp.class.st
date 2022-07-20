@@ -1,5 +1,5 @@
 Class {
-	#name : #PjRestClient,
+	#name : #PjHttpClientApp,
 	#superclass : #PjFileBasedWebApp,
 	#instVars : [
 		'client'
@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PjRestClient class >> appHtmlUrlString [
-	^ super appHtmlUrlString
+PjHttpClientApp class >> appHtmlUrlString [
+	^ 'http://localhost:3000'
 ]
 
 { #category : #accessing }
-PjRestClient >> addQueryParamRow [
+PjHttpClientApp >> addQueryParamRow [
 
 	| dataDiv row key value col |
 	dataDiv := document getElementById: #dataDiv.
@@ -39,11 +39,11 @@ PjRestClient >> addQueryParamRow [
 ]
 
 { #category : #'start-stop' }
-PjRestClient >> start [
+PjHttpClientApp >> start [
 
 	| urlInput submitButton methodSelect addQueryParamButton bodyFormatSelect timeoutInput |
 	super start.
-	client := RestClient new.
+	client := PjHttpClient new.
 	client contentType: 'application/json'.
 	urlInput := document getElementById: #url.
 	methodSelect := document getElementById: #method.
@@ -83,7 +83,7 @@ PjRestClient >> start [
 ]
 
 { #category : #accessing }
-PjRestClient >> updateBodyForm: format [
+PjHttpClientApp >> updateBodyForm: format [
 
 	| bodySection |
 	bodySection := document getElementById: #bodyForm.
