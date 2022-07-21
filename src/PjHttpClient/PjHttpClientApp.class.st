@@ -2,7 +2,11 @@ Class {
 	#name : #PjHttpClientApp,
 	#superclass : #PjFileBasedWebApp,
 	#instVars : [
-		'client'
+		'client',
+		'methodSelect',
+		'urlInput',
+		'bodyFormatSelect',
+		'bodyTextArea'
 	],
 	#category : #'PjHttpClient-App'
 }
@@ -62,22 +66,16 @@ PjHttpClientApp >> initAddQueryParamButton [
 { #category : #'start-stop' }
 PjHttpClientApp >> initBodyFormatSelect [
 
-	| bodyFormatSelect |
 	bodyFormatSelect := document getElementById: #bodyFormat.
 	bodyFormatSelect addEventListener: #change block: [ 
 		client contentType: bodyFormatSelect value.
-		client body: nil.
 		self updateBodyForm: bodyFormatSelect value ]
 ]
 
 { #category : #'start-stop' }
 PjHttpClientApp >> initMethodSelect [
 
-	| methodSelect |
 	methodSelect := document getElementById: #method.
-	methodSelect
-		addEventListener: #change
-		block: [ client method: methodSelect value ].
 	self changeElement: methodSelect value: 'GET'. 
 ]
 
@@ -86,8 +84,11 @@ PjHttpClientApp >> initSubmitButton [
 
 	| submitButton |
 	submitButton := document getElementById: #send.
-	submitButton addEventListener: #click block: [ client send ].
-	self changeElement: submitButton value: 2000
+	submitButton addEventListener: #click block: [ 
+		| req body |
+		req := client method: methodSelect value url: urlInput value.
+		body := bodyTextArea ifNil: [ '' ] ifNotNil: [ :area | area value ].
+		req send: body ]
 ]
 
 { #category : #'start-stop' }
@@ -98,17 +99,13 @@ PjHttpClientApp >> initTimeout [
 
 	timeoutInput
 		addEventListener: #change
-		block: [ client timeout: timeoutInput value ]
+		block: [ client timeout: timeoutInput value asInteger milliSeconds ]
 ]
 
 { #category : #'start-stop' }
 PjHttpClientApp >> initUrlInput [
 
-	| urlInput |
-	urlInput := document getElementById: #url.
-	urlInput
-		addEventListener: #change
-		block: [ client url: urlInput value ]
+	urlInput := document getElementById: #url
 ]
 
 { #category : #'dom update' }
@@ -124,8 +121,6 @@ PjHttpClientApp >> start [
 
 	super start.
 	client := PjHttpClient new.
-	client contentType: 'application/json'.
-	client method: 'GET'.
 	self initTimeout.
 	self initAddQueryParamButton.
 	self initBodyFormatSelect.
@@ -141,7 +136,10 @@ PjHttpClientApp >> start [
 		| resultPre |
 		console log: aClient.
 		resultPre := document getElementById: #result.
-		resultPre innerHTML: 'Request timed out' ]
+		resultPre innerHTML: 'Request timed out' ].
+	client onProgress: [ :aClient | 
+		| resultPre |
+		console log: aClient ]
 ]
 
 { #category : #accessing }
@@ -150,10 +148,7 @@ PjHttpClientApp >> updateBodyForm: format [
 	| bodySection |
 	bodySection := document getElementById: #bodyForm.
 	bodySection innerHTML: ''.
+	bodyTextArea := nil.
 	format = 'application/json' ifTrue: [ 
-		| textArea |
-		textArea := self addElement: 'textArea' to: bodySection.
-		textArea
-			addEventListener: #change
-			block: [ client body: textArea value ] ]
+		bodyTextArea := self addElement: 'textArea' to: bodySection ]
 ]

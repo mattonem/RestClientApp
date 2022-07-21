@@ -2,12 +2,8 @@ Class {
 	#name : #PjHttpClient,
 	#superclass : #Object,
 	#instVars : [
-		'url',
-		'method',
+		'baseUrl',
 		'queryData',
-		'formBodyData',
-		'body',
-		'contentType',
 		'timeout',
 		'onTimeout',
 		'onLoad',
@@ -16,25 +12,23 @@ Class {
 		'onLoadEnd',
 		'onLoadStart',
 		'onProgress',
-		'onReadyStateChange'
-	],
-	#pools : [
-		'PjBrowserGlobals'
+		'onReadyStateChange',
+		'defaultRequestHeader'
 	],
 	#category : #'PjHttpClient-Core'
 }
 
 { #category : #accessing }
-PjHttpClient >> body: aString [ 
-	body := aString
+PjHttpClient >> contentType: aString [ 
+	defaultRequestHeader at: 'Content-Type' put: aString
 ]
 
 { #category : #accessing }
-PjHttpClient >> contentType: aString [ 
-	contentType := aString
+PjHttpClient >> defaultRequestHeaderAt: aKey put: aValue [ 
+	defaultRequestHeader at: aKey put: aValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 PjHttpClient >> encodeParam: aDict [
 	| string |
 	aDict ifEmpty: [ ^ '' ].
@@ -42,11 +36,6 @@ PjHttpClient >> encodeParam: aDict [
 	aDict keysAndValuesDo: [ :key :value | 
 		string := string , key , '=' , value , '&' ].
 	^ string
-]
-
-{ #category : #'as yet unclassified' }
-PjHttpClient >> formDataKey: aString value: aString2 [ 
-	formBodyData at: aString put: aString2 
 ]
 
 { #category : #actions }
@@ -58,20 +47,39 @@ PjHttpClient >> initCallbacksOn: client [
 	onLoadStart ifNotNil: [ client addEventListener: #loadstart block: onLoadStart ].
 	onProgress ifNotNil: [ client addEventListener: #progress block: onProgress ].
 	onTimeout ifNotNil: [ client addEventListener: #timeout block: onTimeout ].
+	^ client
 ]
 
 { #category : #accessing }
 PjHttpClient >> initialize [
 	super initialize.
 	queryData := Dictionary new.
-	formBodyData := Dictionary new.
-	method := 'GET'
+	defaultRequestHeader := Dictionary new.
+
+	timeout := 2000 milliSeconds
 ]
 
-{ #category : #accessing }
-PjHttpClient >> method: anObject [
+{ #category : #actions }
+PjHttpClient >> method: aMethod endpoint: endpoint queryParam: paramDict [
 
-	method := anObject
+	^ self method: aMethod url: (baseUrl, endpoint, self encodeParam: paramDict)
+]
+
+{ #category : #actions }
+PjHttpClient >> method: aMethod url: anUrl [
+
+	^ self initCallbacksOn: ((PjHttpRequest
+			    open: aMethod
+			    url: anUrl , (self encodeParam: queryData))
+			   timeout: timeout;
+				header: defaultRequestHeader;
+			   yourself)
+]
+
+{ #category : #actions }
+PjHttpClient >> method: aMethod url: anUrl queryParam: paramDict [
+
+	^ self method: aMethod url: (anUrl , self encodeParam: paramDict)
 ]
 
 { #category : #accessing }
@@ -126,28 +134,7 @@ PjHttpClient >> queryDataKey: aString value: aString2 [
 	queryData at: aString put: aString2 
 ]
 
-{ #category : #actions }
-PjHttpClient >> send [
-
-	| client |
-	client := XMLHttpRequest new.
-	client
-		open: method
-		url: url , (self encodeParam: queryData)
-		async: true.
-	client setRequestHeader: 'content-type' value: contentType.
-	client instVarNamed: #timeout put: timeout.
-	self initCallbacksOn: client.
-	client send: body
-]
-
 { #category : #accessing }
-PjHttpClient >> timeout: aString [ 
-	timeout := aString asNumber
-]
-
-{ #category : #accessing }
-PjHttpClient >> url: anObject [
-
-	url := anObject
+PjHttpClient >> timeout: aDuration [ 
+	timeout := aDuration 
 ]
