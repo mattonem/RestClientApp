@@ -6,7 +6,8 @@ Class {
 		'methodSelect',
 		'urlInput',
 		'bodyFormatSelect',
-		'bodyTextArea'
+		'bodyTextArea',
+		'queryParam'
 	],
 	#category : #'PjHttpClient-App'
 }
@@ -36,10 +37,10 @@ PjHttpClientApp >> addQueryParamRow [
 	self cssClassesElement: value set: #( 'col-auto' 'form-control' value ).
 	key
 		addEventListener: #change
-		block: [ client queryDataKey: key value value: value value ].
+		block: [ queryParam at: key value put: value value ].
 	value
 		addEventListener: #change
-		block: [ client queryDataKey: key value value: value value ]
+		block: [ queryParam at: key value put: value value ]
 ]
 
 { #category : #'dom update' }
@@ -86,7 +87,7 @@ PjHttpClientApp >> initSubmitButton [
 	submitButton := document getElementById: #send.
 	submitButton addEventListener: #click block: [ 
 		| req body |
-		req := client method: methodSelect value url: urlInput value.
+		req := client method: methodSelect value url: urlInput value queryParam: queryParam.
 		body := bodyTextArea ifNil: [ '' ] ifNotNil: [ :area | area value ].
 		req send: body ]
 ]
@@ -121,6 +122,7 @@ PjHttpClientApp >> start [
 
 	super start.
 	client := PjHttpClient new.
+	queryParam := Dictionary new.
 	self initTimeout.
 	self initAddQueryParamButton.
 	self initBodyFormatSelect.

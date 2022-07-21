@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'baseUrl',
-		'queryData',
 		'timeout',
 		'onTimeout',
 		'onLoad',
@@ -53,10 +52,15 @@ PjHttpClient >> initCallbacksOn: client [
 { #category : #accessing }
 PjHttpClient >> initialize [
 	super initialize.
-	queryData := Dictionary new.
 	defaultRequestHeader := Dictionary new.
 
 	timeout := 2000 milliSeconds
+]
+
+{ #category : #actions }
+PjHttpClient >> method: aMethod endpoint: endpoint [ 
+
+	^ self method: aMethod url: (baseUrl, endpoint)
 ]
 
 { #category : #actions }
@@ -70,7 +74,7 @@ PjHttpClient >> method: aMethod url: anUrl [
 
 	^ self initCallbacksOn: ((PjHttpRequest
 			    open: aMethod
-			    url: anUrl , (self encodeParam: queryData))
+			    url: anUrl)
 			   timeout: timeout;
 				header: defaultRequestHeader;
 			   yourself)
@@ -79,7 +83,7 @@ PjHttpClient >> method: aMethod url: anUrl [
 { #category : #actions }
 PjHttpClient >> method: aMethod url: anUrl queryParam: paramDict [
 
-	^ self method: aMethod url: (anUrl , self encodeParam: paramDict)
+	^ self method: aMethod url: (anUrl , (self encodeParam: paramDict))
 ]
 
 { #category : #accessing }
@@ -127,11 +131,6 @@ PjHttpClient >> onReadyStateChange: anObject [
 { #category : #accessing }
 PjHttpClient >> onTimeout: aFullBlockClosure [ 
 	onTimeout := aFullBlockClosure
-]
-
-{ #category : #accessing }
-PjHttpClient >> queryDataKey: aString value: aString2 [ 
-	queryData at: aString put: aString2 
 ]
 
 { #category : #accessing }
