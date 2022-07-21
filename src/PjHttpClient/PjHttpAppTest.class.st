@@ -36,6 +36,12 @@ PjHttpAppTest >> setUp [
 ]
 
 { #category : #waiting }
+PjHttpAppTest >> testBtoa [
+
+	self assert: (PjHttpRequest new btoa: 'hello') equals: 'aGVsbG8='
+]
+
+{ #category : #waiting }
 PjHttpAppTest >> testGetUrl [
 	self changeElement: urlInput value: 'https://reqres.in/api/users/2'. 
 	self changeElement: methodSelect value: 'GET'. 
