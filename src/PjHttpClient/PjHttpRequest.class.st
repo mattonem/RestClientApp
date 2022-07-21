@@ -23,6 +23,12 @@ PjHttpRequest >> addEventListener: anEvent block: aFullBlockClosure [
 	request addEventListener: anEvent block: aFullBlockClosure
 ]
 
+{ #category : #'event handling' }
+PjHttpRequest >> btoa: aString [
+	<javascript: 'return btoa(aString)'>
+	^ aString asByteArray base64Encoded 
+]
+
 { #category : #accessing }
 PjHttpRequest >> header: aCollection [ 
 	aCollection keysAndValuesDo: [ :key :value | request setRequestHeader: key put: value ]
@@ -47,4 +53,9 @@ PjHttpRequest >> send: aBody [
 { #category : #accessing }
 PjHttpRequest >> timeout: aDuration [ 
 	request instVarNamed: #timeout put: aDuration asMilliSeconds
+]
+
+{ #category : #'event handling' }
+PjHttpRequest >> username: username password: password [
+	request setRequestHeader: 'Authorization' value: 'Basic ', (self btoa: username, ':', password)
 ]

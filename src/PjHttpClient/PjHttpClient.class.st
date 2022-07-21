@@ -12,7 +12,9 @@ Class {
 		'onLoadStart',
 		'onProgress',
 		'onReadyStateChange',
-		'defaultRequestHeader'
+		'defaultRequestHeader',
+		'username',
+		'password'
 	],
 	#category : #'PjHttpClient-Core'
 }
@@ -77,6 +79,7 @@ PjHttpClient >> method: aMethod url: anUrl [
 			    url: anUrl)
 			   timeout: timeout;
 				header: defaultRequestHeader;
+				username: username password: password;
 			   yourself)
 ]
 
@@ -134,6 +137,18 @@ PjHttpClient >> onTimeout: aFullBlockClosure [
 ]
 
 { #category : #accessing }
+PjHttpClient >> password: anObject [
+
+	password := anObject
+]
+
+{ #category : #accessing }
 PjHttpClient >> timeout: aDuration [ 
 	timeout := aDuration 
+]
+
+{ #category : #accessing }
+PjHttpClient >> username: anObject [
+
+	username := anObject
 ]
