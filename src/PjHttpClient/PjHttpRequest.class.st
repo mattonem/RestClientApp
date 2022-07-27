@@ -25,7 +25,9 @@ PjHttpRequest >> addEventListener: anEvent block: aFullBlockClosure [
 
 { #category : #'event handling' }
 PjHttpRequest >> btoa: aString [
-	^ aString asByteArray base64Encoded 
+
+	<javascript: 'return btoa(aString)'>
+	^ aString asByteArray base64Encoded
 ]
 
 { #category : #accessing }
