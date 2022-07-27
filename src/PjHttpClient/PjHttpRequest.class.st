@@ -56,5 +56,12 @@ PjHttpRequest >> timeout: aDuration [
 
 { #category : #'event handling' }
 PjHttpRequest >> username: username password: password [
+	username ifNil: [ ^ self ].
+	password ifNil: [ ^ self ].
 	request setRequestHeader: 'Authorization' value: 'Basic ', (self btoa: username, ':', password)
+]
+
+{ #category : #accessing }
+PjHttpRequest >> withCredentials: aBoolean [ 
+	request instVarNamed: #withCredentials put: aBoolean
 ]

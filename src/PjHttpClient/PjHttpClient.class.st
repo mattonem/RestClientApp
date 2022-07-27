@@ -14,7 +14,8 @@ Class {
 		'onReadyStateChange',
 		'defaultRequestHeader',
 		'username',
-		'password'
+		'password',
+		'withCredentials'
 	],
 	#category : #'PjHttpClient-Core'
 }
@@ -77,6 +78,7 @@ PjHttpClient >> method: aMethod url: anUrl [
 	^ self initCallbacksOn: ((PjHttpRequest
 			    open: aMethod
 			    url: anUrl)
+				withCredentials: withCredentials;
 			   timeout: timeout;
 				header: defaultRequestHeader;
 				username: username password: password;
@@ -151,4 +153,9 @@ PjHttpClient >> timeout: aDuration [
 PjHttpClient >> username: anObject [
 
 	username := anObject
+]
+
+{ #category : #actions }
+PjHttpClient >> withCredentials: aBoolean [
+	withCredentials := aBoolean
 ]
