@@ -19,6 +19,12 @@ BaselineOfPjHttpClient >> baseline: spec [
 ]
 
 { #category : #baselines }
+BaselineOfPjHttpClient >> compatibility: spec [
+	"Define a 'Compatibility' group that can be used as a dependency later to overcome differences in Pharo releases"
+
+]
+
+{ #category : #baselines }
 BaselineOfPjHttpClient >> groups: spec [
 
 	"Define groups for loading"
