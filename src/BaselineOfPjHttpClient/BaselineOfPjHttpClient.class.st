@@ -30,10 +30,15 @@ BaselineOfPjHttpClient >> groups: spec [
 	"Define groups for loading"
 
 	"Core"
-	spec group: 'Core' with: #( 'PjHttpClient' ).
+
+	spec
+		group: 'Core' with: #( 'PjHttpClient-Core' );
+		group: 'Tests' with: #( 'PjHTTPClient-Tests' ).
+
 
 	"Virtual groups (lowercase) from Metacello"
-	spec group: 'default' with: #( 'Core' )
+	spec group: 'default' with: #( 'Core' ).
+	spec group: 'all' with: #( 'Tests' )
 ]
 
 { #category : #baselines }
@@ -41,7 +46,9 @@ BaselineOfPjHttpClient >> packages: spec [
 		"Define and list all packages and their dependencies"
 		
 		"Core"
-		spec package: 'PjHTTPClient' with: [ spec requires: #('PharoJS') ].
+		spec package: 'PjHTTPClient-Core' with: [ spec requires: #('PharoJS') ].
+		spec package: 'PjHTTPClient-App' with: [ spec requires: #('PjHTTPClient-Core') ].
+		spec package: 'PjHTTPClient-Tests' with: [ spec requires: #('PjHTTPClient-App') ].
 ]
 
 { #category : #baselines }
