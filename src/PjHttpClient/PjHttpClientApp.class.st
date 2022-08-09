@@ -17,6 +17,13 @@ PjHttpClientApp class >> appHtmlUrlString [
 	^ super appHtmlUrlString
 ]
 
+{ #category : #'as yet unclassified' }
+PjHttpClientApp class >> bridgeClientClass [
+	<pharoJsSkip>
+	
+	^ PjBridgeServedFileBasedBrowserBridgeClient
+]
+
 { #category : #accessing }
 PjHttpClientApp >> addQueryParamRow [
 
