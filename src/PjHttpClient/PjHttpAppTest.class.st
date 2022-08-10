@@ -21,6 +21,22 @@ PjHttpAppTest class >> appClass [
 	^ PjHttpClientApp
 ]
 
+{ #category : #asserting }
+PjHttpAppTest >> assert: aBlock equals: aString timeout: aDuration [ 
+	self waitUntil: [ aBlock value = aString ] timeOut: aDuration ifTimeOutDo: [ self assert: aBlock value equals: aString ].
+	self assert: aBlock value equals: aString
+]
+
+{ #category : #asserting }
+PjHttpAppTest >> assert: aFullBlockClosure timeout: aDuration [
+
+	self
+		waitUntil: [aFullBlockClosure value]
+		timeOut: aDuration
+		ifTimeOutDo: [ self assert: aFullBlockClosure value ].
+	self assert: aFullBlockClosure value
+]
+
 { #category : #waiting }
 PjHttpAppTest >> setUp [
 
@@ -37,7 +53,6 @@ PjHttpAppTest >> setUp [
 
 { #category : #waiting }
 PjHttpAppTest >> testBtoa [
-
 	self assert: (PjHttpRequest new btoa: 'hello') equals: 'aGVsbG8='
 ]
 
@@ -46,9 +61,7 @@ PjHttpAppTest >> testGetUrl [
 	self changeElement: urlInput value: 'https://reqres.in/api/users/2'. 
 	self changeElement: methodSelect value: 'GET'. 
 	self clickElement: submitButton.
-	1 second wait.
-	resultPre innerHTML.
-	self assert: (resultPre innerHTML) equals: '{"data":{"id":2,"email":"janet.weaver@reqres.in","first_name":"Janet","last_name":"Weaver","avatar":"https://reqres.in/img/faces/2-image.jpg"},"support":{"url":"https://reqres.in/#support-heading","text":"To keep ReqRes free, contributions towards server costs are appreciated!"}}'
+	self assert: [resultPre innerHTML] equals: '{"data":{"id":2,"email":"janet.weaver@reqres.in","first_name":"Janet","last_name":"Weaver","avatar":"https://reqres.in/img/faces/2-image.jpg"},"support":{"url":"https://reqres.in/#support-heading","text":"To keep ReqRes free, contributions towards server costs are appreciated!"}}' timeout: 2 seconds.
 ]
 
 { #category : #waiting }
@@ -65,9 +78,8 @@ PjHttpAppTest >> testGetWithData [
 	self changeElement: keyinput value: 'delay'.
 	self changeElement: valueInput value: 1.
 	self clickElement: submitButton.
-	2 second wait.
-	resultPre innerHTML.
-	self assert: (resultPre innerHTML includesSubstring: '"per_page"')
+
+	self assert: [resultPre innerHTML includesSubstring: '"per_page"']  timeout: 3 seconds.
 	
 ]
 
@@ -87,9 +99,8 @@ PjHttpAppTest >> testGetWithDataTimeout [
 	self changeElement: keyinput value: 'delay'.
 	self changeElement: valueInput value: 2.
 	self clickElement: submitButton.
-	1 second wait.
-	resultPre innerHTML.
-	self assert: resultPre innerHTML equals: 'Request timed out'
+
+	self assert: [resultPre innerHTML] equals: 'Request timed out' timeout: 2 seconds
 	
 ]
 
@@ -101,7 +112,9 @@ PjHttpAppTest >> testPostJson [
 	self clickElement: submitButton.
 	1 second wait.
 	resultPre innerHTML.
-	self assert: (resultPre innerHTML includesSubstring: '"createdAt"')
+	self
+		assert: [ resultPre innerHTML includesSubstring: '"createdAt"' ]
+		timeout: 2 seconds
 ]
 
 { #category : #waiting }
@@ -112,14 +125,16 @@ PjHttpAppTest >> testPostJsonWithData [
 	self changeElement: methodSelect value: 'POST'.
 	self changeElement: bodyFormatSelect value: 'application/json'.
 	bodySection := document getElementById: #bodyForm.
-	bodyInput :=( document getElementsByTagName: 'textArea') first.
+	bodyInput := (document getElementsByTagName: 'textArea') first.
 	self
 		changeElement: bodyInput
 		value: '{"email": "eve.holt@reqres.in", "password": "pistol"}'.
 
 	self clickElement: submitButton.
-	1second wait.
-	resultPre innerHTML.
-	self assert: (resultPre innerHTML includesSubstring:
-			 '{"id":4,"token":"QpwL5tke4Pnpja7X4"}')
+
+	self
+		assert: [ 
+			resultPre innerHTML includesSubstring:
+				'{"id":4,"token":"QpwL5tke4Pnpja7X4"}' ]
+		timeout: 2 seconds
 ]
