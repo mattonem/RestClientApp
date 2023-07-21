@@ -50,5 +50,5 @@ BaselineOfPjHttpClient >> prerequisites: spec [
 
 	"Prerequisite Baselines"
 	spec
-		baseline: 'PharoJS' with: [ spec repository: 'github://PharoJS/PharoJS:pharo10' ].
+		baseline: 'PharoJS' with: [ spec repository: 'github://PharoJS/PharoJS' ].
 ]
