@@ -18,6 +18,14 @@ PjHttpRequest class >> open: aMethod url: aUrl [
 		  yourself
 ]
 
+{ #category : #'as yet unclassified' }
+PjHttpRequest class >> syncOpen: aMethod url: aUrl [
+
+	^ self new
+		  syncOpen: aMethod url: aUrl;
+		  yourself
+]
+
 { #category : #'event handling' }
 PjHttpRequest >> addEventListener: anEvent block: aFullBlockClosure [ 
 	request addEventListener: anEvent block: aFullBlockClosure
@@ -49,6 +57,17 @@ PjHttpRequest >> open: aMethod url: aUrl [
 { #category : #processing }
 PjHttpRequest >> send: aBody [ 
 	request send: aBody
+]
+
+{ #category : #initialize }
+PjHttpRequest >> status [
+	^ request status
+]
+
+{ #category : #initialize }
+PjHttpRequest >> syncOpen: aMethod url: aUrl [ 
+
+	request open: aMethod url: aUrl sync: false
 ]
 
 { #category : #accessing }

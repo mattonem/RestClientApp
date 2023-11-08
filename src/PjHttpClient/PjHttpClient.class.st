@@ -144,6 +144,17 @@ PjHttpClient >> password: anObject [
 	password := anObject
 ]
 
+{ #category : #actions }
+PjHttpClient >> syncMethod: aMethod url: anUrl [
+
+	^ self initCallbacksOn:
+		  ((PjHttpRequest syncOpen: aMethod url: anUrl)
+			   withCredentials: withCredentials;
+			   header: defaultRequestHeader;
+			   username: username password: password;
+			   yourself)
+]
+
 { #category : #accessing }
 PjHttpClient >> timeout: aDuration [ 
 	timeout := aDuration 
