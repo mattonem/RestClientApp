@@ -35,15 +35,15 @@ PjHttpClientTest >> testOnLoad [
 { #category : #test }
 PjHttpClientTest >> testSyncGet [
 
-	self evalBlock: [
-		| client req |
-		global instVarNamed: #testPassed put: false.
-		client := PjHttpClient new.
-		req := client
-			       syncMethod: 'GET'
-			       url:
-			       'https://raw.githubusercontent.com/PharoJS/PharoJS/c00b06d38cc897eb22912c9f333833f8747a8f00/CordovaExamples/Counter/package.json'.
-		req send: ''.
-		global instVarNamed: #testPassed put: req status ].
-	self assert: (self evalBlock: [ global instVarNamed: #testPassed ]) equals: 200
+	| req2 |
+	req2 := self evalBlock: [
+		        | client req |
+		        client := PjHttpClient new.
+		        req := client
+			               syncMethod: 'GET'
+			               url:
+			               'https://raw.githubusercontent.com/PharoJS/PharoJS/c00b06d38cc897eb22912c9f333833f8747a8f00/CordovaExamples/Counter/package.json'.
+		        req send: ''.
+		        req ].
+	self assert: req2 status equals: 200
 ]

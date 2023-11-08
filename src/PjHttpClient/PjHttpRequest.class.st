@@ -50,8 +50,15 @@ PjHttpRequest >> initialize [
 ]
 
 { #category : #initialize }
-PjHttpRequest >> open: aMethod url: aUrl [ 
+PjHttpRequest >> open: aMethod url: aUrl [
+	console log: aUrl.
 	request open: aMethod url: aUrl
+]
+
+{ #category : #accessing }
+PjHttpRequest >> responseText [
+	console log: request responseText.
+	^ request responseText
 ]
 
 { #category : #processing }
@@ -65,8 +72,8 @@ PjHttpRequest >> status [
 ]
 
 { #category : #initialize }
-PjHttpRequest >> syncOpen: aMethod url: aUrl [ 
-
+PjHttpRequest >> syncOpen: aMethod url: aUrl [
+	console log: aUrl.
 	request open: aMethod url: aUrl sync: false
 ]
 

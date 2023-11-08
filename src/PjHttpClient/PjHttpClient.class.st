@@ -17,6 +17,9 @@ Class {
 		'password',
 		'withCredentials'
 	],
+	#pools : [
+		'PjBrowserGlobals'
+	],
 	#category : #'PjHttpClient-Core'
 }
 
@@ -38,6 +41,14 @@ PjHttpClient >> encodeParam: aDict [
 	aDict keysAndValuesDo: [ :key :value | 
 		string := string , key , '=' , value , '&' ].
 	^ string
+]
+
+{ #category : #actions }
+PjHttpClient >> get: aString [
+
+	^ (self syncMethod: 'GET' url: aString asString)
+		send: '';
+		responseText
 ]
 
 { #category : #actions }
