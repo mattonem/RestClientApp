@@ -79,7 +79,7 @@ PjHttpRequest >> status [
 
 { #category : #initialize }
 PjHttpRequest >> syncOpen: aMethod url: aUrl [
-	console log: aUrl.
+
 	request open: aMethod url: aUrl sync: false
 ]
 
