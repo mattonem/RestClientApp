@@ -15,7 +15,8 @@ Class {
 		'defaultRequestHeader',
 		'username',
 		'password',
-		'withCredentials'
+		'withCredentials',
+		'request'
 	],
 	#pools : [
 		'PjBrowserGlobals'
@@ -86,13 +87,11 @@ PjHttpClient >> method: aMethod endpoint: endpoint queryParam: paramDict [
 { #category : #actions }
 PjHttpClient >> method: aMethod url: anUrl [
 
-	^ self initCallbacksOn: ((PjHttpRequest
-			    open: aMethod
-			    url: anUrl)
-				withCredentials: withCredentials;
+	^ request := self initCallbacksOn: ((PjHttpRequest open: aMethod url: anUrl)
+			   withCredentials: withCredentials;
 			   timeout: timeout;
-				header: defaultRequestHeader;
-				username: username password: password;
+			   header: defaultRequestHeader;
+			   username: username password: password;
 			   yourself)
 ]
 
@@ -155,10 +154,15 @@ PjHttpClient >> password: anObject [
 	password := anObject
 ]
 
+{ #category : #accessing }
+PjHttpClient >> response [
+	^ request
+]
+
 { #category : #actions }
 PjHttpClient >> syncMethod: aMethod url: anUrl [
 
-	^ self initCallbacksOn:
+	^ request := self initCallbacksOn:
 		  ((PjHttpRequest syncOpen: aMethod url: anUrl)
 			   withCredentials: withCredentials;
 			   header: defaultRequestHeader;

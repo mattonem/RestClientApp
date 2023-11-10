@@ -38,6 +38,12 @@ PjHttpRequest >> btoa: aString [
 	^ aString asByteArray base64Encoded
 ]
 
+{ #category : #initialize }
+PjHttpRequest >> code [
+
+	^ request status
+]
+
 { #category : #accessing }
 PjHttpRequest >> header: aCollection [ 
 	aCollection keysAndValuesDo: [ :key :value | request setRequestHeader: key put: value ]
