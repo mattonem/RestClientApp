@@ -45,6 +45,12 @@ PjHttpRequest >> code [
 ]
 
 { #category : #accessing }
+PjHttpRequest >> contents [
+
+	^ self responseText
+]
+
+{ #category : #accessing }
 PjHttpRequest >> header: aCollection [ 
 	aCollection keysAndValuesDo: [ :key :value | request setRequestHeader: key put: value ]
 ]
