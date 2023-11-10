@@ -69,7 +69,7 @@ PjHttpRequest >> open: aMethod url: aUrl [
 
 { #category : #accessing }
 PjHttpRequest >> responseText [
-	console log: request responseText.
+
 	^ request responseText
 ]
 
