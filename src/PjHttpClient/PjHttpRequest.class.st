@@ -63,7 +63,7 @@ PjHttpRequest >> initialize [
 
 { #category : #initialize }
 PjHttpRequest >> open: aMethod url: aUrl [
-	console log: aUrl.
+
 	request open: aMethod url: aUrl
 ]
 
