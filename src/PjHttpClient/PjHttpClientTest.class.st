@@ -16,6 +16,21 @@ PjHttpClientTest class >> appClass [
 ]
 
 { #category : #test }
+PjHttpClientTest >> testGetDo [
+
+	self evalBlock: [ global js_at: 'passed' put: false ].
+	self evalBlock: [
+		| client |
+		client := PjHttpClient new.
+		client
+			getUrl:
+			'https://raw.githubusercontent.com/PharoJS/PharoJS/c00b06d38cc897eb22912c9f333833f8747a8f00/CordovaExamples/Counter/package.json'
+			do: [ global js_at: 'passed' put: true ] ].
+	1 second wait.
+	self assert: (self evalBlock: [ global js_at: 'passed' ])
+]
+
+{ #category : #test }
 PjHttpClientTest >> testOnLoad [
 
 	self evalBlock: [

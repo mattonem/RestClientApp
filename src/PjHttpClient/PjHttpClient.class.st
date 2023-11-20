@@ -53,6 +53,13 @@ PjHttpClient >> get: aString [
 ]
 
 { #category : #actions }
+PjHttpClient >> getUrl: anUrl do: aBlock [
+
+	<javascript: 'this.pj_jsgetUrl_do_(anUrl, aBlock)'>
+	aBlock value: [ ZnClient new get: anUrl ]
+]
+
+{ #category : #actions }
 PjHttpClient >> initCallbacksOn: client [
 	onAbort ifNotNil: [ client addEventListener: #abort block: onAbort ].
 	onError ifNotNil: [ client addEventListener: #error block: onError ].
@@ -70,6 +77,17 @@ PjHttpClient >> initialize [
 	defaultRequestHeader := Dictionary new.
 
 	timeout := 2000 milliSeconds
+]
+
+{ #category : #actions }
+PjHttpClient >> jsgetUrl: anUrl do: aBlock [
+
+	| request |
+	request := XMLHttpRequest new.
+	request onreadystatechange: [ :event | aBlock value: event target responseText
+ ].
+	request open: 'GET' url: anUrl asString.
+	request send:''
 ]
 
 { #category : #actions }
