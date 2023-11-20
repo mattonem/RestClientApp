@@ -56,7 +56,9 @@ PjHttpClient >> get: aString [
 PjHttpClient >> getUrl: anUrl do: aBlock [
 
 	<javascript: 'this.pj_jsgetUrl_do_(anUrl, aBlock)'>
-	aBlock value: [ ZnClient new get: anUrl ]
+	| response |
+	response := (ZnClient new get: anUrl) response.
+	aBlock cull: response contents cull: response code
 ]
 
 { #category : #actions }
@@ -82,12 +84,13 @@ PjHttpClient >> initialize [
 { #category : #actions }
 PjHttpClient >> jsgetUrl: anUrl do: aBlock [
 
-	| request |
-	request := XMLHttpRequest new.
-	request onreadystatechange: [ :event | aBlock value: event target responseText
- ].
-	request open: 'GET' url: anUrl asString.
-	request send:''
+	| req |
+	req := XMLHttpRequest new.
+	req onreadystatechange: [ :event |
+		(event target readyState = 4) ifTrue: [
+			aBlock cull: event target responseText cull: event target status ] ].
+	req open: 'GET' url: anUrl asString.
+	req send: ''
 ]
 
 { #category : #actions }
