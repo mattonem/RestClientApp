@@ -15,8 +15,7 @@ Class {
 		'defaultRequestHeader',
 		'username',
 		'password',
-		'withCredentials',
-		'request'
+		'withCredentials'
 	],
 	#pools : [
 		'PjBrowserGlobals'
@@ -42,14 +41,6 @@ PjHttpClient >> encodeParam: aDict [
 	aDict keysAndValuesDo: [ :key :value | 
 		string := string , key , '=' , value , '&' ].
 	^ string
-]
-
-{ #category : #actions }
-PjHttpClient >> get: aString [
-
-	^ (self syncMethod: 'GET' url: aString asString)
-		send: '';
-		responseText
 ]
 
 { #category : #actions }
@@ -91,35 +82,6 @@ PjHttpClient >> jsgetUrl: anUrl do: aBlock [
 			aBlock cull: event target responseText cull: event target status ] ].
 	req open: 'GET' url: anUrl asString.
 	req send: ''
-]
-
-{ #category : #actions }
-PjHttpClient >> method: aMethod endpoint: endpoint [ 
-
-	^ self method: aMethod url: (baseUrl, endpoint)
-]
-
-{ #category : #actions }
-PjHttpClient >> method: aMethod endpoint: endpoint queryParam: paramDict [
-
-	^ self method: aMethod url: (baseUrl, endpoint, self encodeParam: paramDict)
-]
-
-{ #category : #actions }
-PjHttpClient >> method: aMethod url: anUrl [
-
-	^ request := self initCallbacksOn: ((PjHttpRequest open: aMethod url: anUrl)
-			   withCredentials: withCredentials;
-			   timeout: timeout;
-			   header: defaultRequestHeader;
-			   username: username password: password;
-			   yourself)
-]
-
-{ #category : #actions }
-PjHttpClient >> method: aMethod url: anUrl queryParam: paramDict [
-
-	^ self method: aMethod url: (anUrl , (self encodeParam: paramDict))
 ]
 
 { #category : #accessing }
@@ -173,22 +135,6 @@ PjHttpClient >> onTimeout: aFullBlockClosure [
 PjHttpClient >> password: anObject [
 
 	password := anObject
-]
-
-{ #category : #accessing }
-PjHttpClient >> response [
-	^ request
-]
-
-{ #category : #actions }
-PjHttpClient >> syncMethod: aMethod url: anUrl [
-
-	^ request := self initCallbacksOn:
-		  ((PjHttpRequest syncOpen: aMethod url: anUrl)
-			   withCredentials: withCredentials;
-			   header: defaultRequestHeader;
-			   username: username password: password;
-			   yourself)
 ]
 
 { #category : #accessing }
