@@ -48,7 +48,7 @@ PjHttpClient >> getUrl: anUrl do: aBlock [
 
 	<javascript: 'this.pj_jsgetUrl_do_(anUrl, aBlock)'>
 	| response |
-	response := (ZnClient new get: anUrl) response.
+	response := (ZnClient new get: anUrl; response) .
 	aBlock cull: response contents cull: response code
 ]
 
